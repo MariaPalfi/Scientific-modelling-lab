@@ -1,0 +1,79 @@
+mpirun -np 2 ./Gadget2 ./parameterfiles/galaxy.param
+mert a galaxy.param ebben a mappában van
+
+hiba:
+cp: 'galaxy/parameters-usedvalues' reguláris fájl nem hozható létre: Nincs ilyen fájl vagy könyvtár
+mkdir galaxy
+
+hiba:
+Can't find initial conditions file.neither as 'ICs/galaxy_littleendian.dat.0'
+nor as 'ICs/galaxy_littleendian.dat'
+elérési útvonal beállítása a galaxy.paramban
+
+
+snapshotok megnézéséhez:
+gadgetviewer
+http://astro.dur.ac.uk/~jch/gadgetviewer/index.html
+https://github.com/jchelly/gadgetviewer/blob/master/README.md
+https://github.com/jchelly/gadgetviewer/releases
+
+./configure 
+make
+make install
+
+gtk+ 2 letöltése, konfigurálása
+sudo apt-get install gtk+2.0
+
+videó készítése:
+https://deparkes.co.uk/2018/01/05/create-video-images-ffmpeg/
+
+
+NGenIC innen, mert a megadott link nem működött: https://wwwmpa.mpa-garching.mpg.de/gadget/
+README olvasása, Makefile szerkesztése
+hiba a make-nél:
+main.c:3:10: fatal error: drfftw_mpi.h: Nincs ilyen fájl vagy könyvtár
+ #include <drfftw_mpi.h>
+ezt szeretné a main.c az NGenICben
+http://www.fftw.org/fftw2_doc/fftw_6.html
+
+
+Tesztelésnél:
+Error. Can't write in file './ICs//ics.0'
+FatalError called with number=10
+[Otletesgep:29693] 1 more process has sent help message help-mpi-api.txt / mpi-abort
+[Otletesgep:29693] Set MCA parameter "orte_base_help_aggregate" to 0 to see all help / error messages
+
+mpiexec -np 8  ./N-GenIC  ics.param --mca orte_base_help_aggregate 0 ...
+
+Error. Can't write in file './ICs//ics.4'
+mkdir ICs
+
+
+2LPTIC
+Gaussian
+Makefile szerkesztése
+elég a make!
+példa az oldalról
+output szerkesztése: elérési útvonalak megadása
+/home/marika/Gadget/2LPTic/run_example
+működik, de megtelt a memóriám
+
+
+Üveggeneráláshoz:
+Gadget Makefile-ban:
+OPT   +=  -DMAKEGLASS=1000000
+N-GenIC ics.param:
+Nmesh = 100
+Nsample = 100
+Redshift = 10000
+mpiexec -np 8 ./N-GenIC ics.param
+Gadget parameterfiles:
+lss.param ebben beállítottam az NGenIC kf-et
+mkdir lss a kimeneti mappa
+mpirun -np 2 ./Gadget2 ./parameterfiles/lss.param
+
+Hiba: a boxsize nem egyezett a Gadget és az N-GenIC paraméterfile-ban
+
+pygadgetviewer
+https://github.com/Besla-Team/jellyfish/blob/master/.travis.yml
+
